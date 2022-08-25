@@ -1,8 +1,0 @@
-*
-
-!.gitignore
-!Makefile
-!.vscode
-!src
-!src/**/*.c
-!README.md
