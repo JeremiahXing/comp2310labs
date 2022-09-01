@@ -58,9 +58,9 @@ Block *init_block()
         fprintf(stderr, "BlockInitalizationError: %s\n", strerror((int)errno));
         return block;
     }
-    // memset((void*)(block+1), 0, block->size-kBlockMetadataSize);
     block->size = kMemorySize;
     block->allocated = false;
+    memset(block+1, 0, block->size-kBlockMetadataSize - 1);
     size_t gap = kMemorySize - kBlockMetadataSize;
     Block* dummy = (Block*)((char*)(block)+gap);
     dummy->allocated = false;
@@ -108,6 +108,7 @@ void my_free(void* ptr){
     }
     Block *block = (Block *)ptr - 1;
     block->allocated = false;
+    memset(block+1, 0, block->size-kBlockMetadataSize);
     Block *next_block = get_next_block(block);
     if (next_block != NULL && !next_block->allocated){
         block->size += next_block->size;
